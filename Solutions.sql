@@ -53,3 +53,20 @@ GROUP BY product_id
 ORDER BY revenue DESC
 LIMIT 5;
 
+-- Meta/Facebook has developed a new programing language called Hack.To measure the popularity 
+-- of Hack they ran a survey with their employees. The survey included data on previous programing familiarity as well as the number 
+-- of years of experience, age, gender and most importantly satisfaction with Hack. Due to an error location data was not collected, 
+-- but your supervisor demands a report showing average popularity of Hack by office location. 
+-- Luckily the user IDs of employees completing the surveys were stored. Based on the above, find the average popularity of the Hack per office location.
+-- Output the location along with the average popularity. Tables: facebook_employees, facebook_hack_survey
+select e.location, avg(h.popularity) from facebook_employees e join facebook_hack_survey h on e.id = h.employee_id 
+group by e.location;
+
+-- Find the average number of bathrooms and bedrooms for each city’s property types.
+-- Output the result along with the city name and the property type.
+-- Table: airbnb_search_details
+select city, property_type, avg(bathrooms), avg(bedrooms) 
+from airbnb_search_details
+group by city, property_type
+
+
