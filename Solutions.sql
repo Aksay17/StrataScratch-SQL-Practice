@@ -69,4 +69,27 @@ select city, property_type, avg(bathrooms), avg(bedrooms)
 from airbnb_search_details
 group by city, property_type
 
+-- Find order details made by Jill and Eva.
+-- Consider the Jill and Eva as first names of customers.
+-- Output the order date, details and cost along with the first name.
+-- Order records based on the customer id in ascending order.
+-- Tables: customers, orders
+select c.first_name, o.order_date, o.order_details, o.total_order_cost from customers c join orders o on c.id = o.cust_id 
+where first_name = 'Jill' or first_name = 'Eva' order by c.id;
 
+-- Find the number of Apple product users and the number of total users with a device and group the counts by language. 
+-- Assume Apple products are only MacBook-Pro, iPhone 5s, and iPad-air. Output the language along with the total number 
+-- of Apple users and users with any device. Order your results based on the number of total users in descending order.
+-- Tables: playbook_events, playbook_users
+SELECT users.language,
+       COUNT (DISTINCT CASE
+                           WHEN device IN ('macbook pro',
+                                           'iphone 5s',
+                                           'ipad air') THEN users.user_id
+                           ELSE NULL
+                       END) AS n_apple_users,
+       COUNT(DISTINCT users.user_id) AS n_total_users
+FROM playbook_users users
+INNER JOIN playbook_events events ON users.user_id = events.user_id
+GROUP BY users.language
+ORDER BY n_total_users DESC;
