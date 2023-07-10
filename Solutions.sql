@@ -93,3 +93,42 @@ FROM playbook_users users
 INNER JOIN playbook_events events ON users.user_id = events.user_id
 GROUP BY users.language
 ORDER BY n_total_users DESC;
+
+-- Find the activity date and the pe_description of facilities with the name 'STREET CHURROS' and with a score of less than 95 points.
+-- Table: los_angeles_restaurant_health_inspections
+SELECT activity_date, pe_description
+FROM los_angeles_restaurant_health_inspections
+WHERE facility_name = 'STREET CHURROS' AND score < 95;
+
+-- Write a query that'll identify returning active users. A returning active user is a user that has made a second purchase
+-- within 7 days of any other of their purchases. Output a list of user_ids of these returning active users.
+-- Table: amazon_transactions
+SELECT DISTINCT(a1.user_id)
+FROM amazon_transactions a1
+JOIN amazon_transactions a2 ON a1.user_id=a2.user_id
+AND a1.id <> a2.id
+AND a2.created_at::date-a1.created_at::date BETWEEN 0 AND 7
+ORDER BY a1.user_id
+
+-- Compare each employee's salary with the average salary of the corresponding department.
+-- Output the department, first name, and salary of employees along with the average salary of that department.
+-- Table: employee
+SELECT 
+        department, 
+        first_name, 
+        salary, 
+        AVG(salary) over (PARTITION BY department) 
+FROM employee;
+
+-- We have a table with employees and their salaries, however, some of the records are old and contain outdated salary information. 
+-- Find the current salary of each employee assuming that salaries increase each year. Output their id, first name, last name, 
+-- department ID, and current salary. Order your list by employee ID in ascending order.
+-- Table: ms_employee_salary
+select id, first_name, last_name, max(salary), department_id from ms_employee_salary 
+group by id, first_name, last_name, department_id order by id
+
+-- Find the number of workers by department who joined in or after April.
+-- Output the department name along with the corresponding number of workers.
+-- Sort records based on the number of workers in descending order.
+-- Table: worker
+select department, count(worker_id) from worker where joining_date > '2014-04-01' group by department order by count(worker_id) desc; 
